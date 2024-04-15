@@ -9,14 +9,8 @@ class Tab:
 
 #faire les fonctions affiches --> tibitou
     def txt_to_tab(self): #tibitou
-        "lire fichier txt"
-
-    def total_command(self): #tibitou
-        "calculer le total des commandes"
-
-    def total_provider(self): #tibitou
-        "calculer le total des fournisseurs"
-
+        #lire fichier txt
+        pass
 
 
     def balas_hammer(self): #marc
@@ -52,34 +46,42 @@ class Tab:
 
     def penalites(self):
         #penalites
+        pass
 
     def max_penalite(self):#4.2
-        "max penalité --> ne pas prenre en compte les pénalités des fictifs"
+        #max penalité --> ne pas prenre en compte les pénalités des fictifs
+        pass
 
     def choix_to_fill(self):
-        "choix pour remplir"
+        #choix pour remplir
+        pass
 
 
 
 
     def nord_ouest(self): #quentin
-        "nord ouest"
+        #nord ouest
+        pass
 
     def is_acyclic(self): #quentin
-        "acyclique avec parcour en largeur"
-
+        #acyclique avec parcour en largeur
+        pass
     def is_connexe(self): #quentin
-        "connexe"
+        #connexe
+        pass
 
 
 
     def marche_pied(self):#tao
-        "marche à pied"
+        #marche à pied
+        pass
 
     def cout_potentiel(self):
-        "cout potentiel"
+        #cout potentiel
+        pass
 
     def cout_marginaux(self):
-        "cout marginaux"
+        #cout marginaux
+        pass
 
 

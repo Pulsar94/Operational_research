@@ -20,16 +20,45 @@ class Tab:
 
 
     def balas_hammer(self): #marc
-        "balas hammer"
+        #Balas-Hammer
+        if self.add_fictif()==False:
+            print("No need to add fictif")
+        else:
+            print("Fictif have been added")
+
 
     def is_command_equal_provider(self):#marc
-        "commande = fournisseur??"
+        if sum(self.command) == sum(self.provider):
+            return True#commande = fournisseur
+        return False#commande != fournisseur
 
-    def command_fictif(self): #marc
-        "commande fictif"
 
-    def provider_fictif(self): #marc
-        "fournisseur fictif"
+    def add_fictif(self): #marc
+        #command/provider fictif
+        if self.is_command_equal_provider()==True:
+            return False#No need to add fictif
+
+        if sum(self.command) < sum(self.provider):
+            diff = sum(self.provider)-sum(self.command)
+            self.command.append(diff)
+            for i in range(len(self.cout)):
+                self.cout[i].append(0)
+
+        elif sum(self.command) > sum(self.provider):
+            diff = sum(self.command)-sum(self.provider)
+            self.provider.append(diff)
+            self.cout.append([0]*len(self.cout[0]))
+        return True#fictif have been added
+
+    def penalites(self):
+        #penalites
+
+    def max_penalite(self):#4.2
+        "max penalité --> ne pas prenre en compte les pénalités des fictifs"
+
+    def choix_to_fill(self):
+        "choix pour remplir"
+
 
 
 
@@ -47,19 +76,10 @@ class Tab:
     def marche_pied(self):#tao
         "marche à pied"
 
-    def penalites(self):
-        "penalites"
-
-    def max_penalite(self):#4.2
-        "max penalité --> ne pas prenre en compte les pénalités des fictifs"
-
     def cout_potentiel(self):
         "cout potentiel"
 
     def cout_marginaux(self):
         "cout marginaux"
-
-    def choix_to_fill(self):
-        "choix pour remplir"
 
 

@@ -9,57 +9,79 @@ class Tab:
 
 #faire les fonctions affiches --> tibitou
     def txt_to_tab(self): #tibitou
-        "lire fichier txt"
-
-    def total_command(self): #tibitou
-        "calculer le total des commandes"
-
-    def total_provider(self): #tibitou
-        "calculer le total des fournisseurs"
-
+        #lire fichier txt
+        pass
 
 
     def balas_hammer(self): #marc
-        "balas hammer"
+        #Balas-Hammer
+        if self.add_fictif()==False:
+            print("No need to add fictif")
+        else:
+            print("Fictif have been added")
+
 
     def is_command_equal_provider(self):#marc
-        "commande = fournisseur??"
+        if sum(self.command) == sum(self.provider):
+            return True#commande = fournisseur
+        return False#commande != fournisseur
 
-    def command_fictif(self): #marc
-        "commande fictif"
 
-    def provider_fictif(self): #marc
-        "fournisseur fictif"
+    def add_fictif(self): #marc
+        #command/provider fictif
+        if self.is_command_equal_provider()==True:
+            return False#No need to add fictif
+
+        if sum(self.command) < sum(self.provider):
+            diff = sum(self.provider)-sum(self.command)
+            self.command.append(diff)
+            for i in range(len(self.cout)):
+                self.cout[i].append(0)
+
+        elif sum(self.command) > sum(self.provider):
+            diff = sum(self.command)-sum(self.provider)
+            self.provider.append(diff)
+            self.cout.append([0]*len(self.cout[0]))
+        return True#fictif have been added
+
+    def penalites(self):
+        #penalites
+        pass
+
+    def max_penalite(self):#4.2
+        #max penalité --> ne pas prenre en compte les pénalités des fictifs
+        pass
+
+    def choix_to_fill(self):
+        #choix pour remplir
+        pass
+
 
 
 
     def nord_ouest(self): #quentin
-        "nord ouest"
+        #nord ouest
+        pass
 
     def is_acyclic(self): #quentin
-        "acyclique avec parcour en largeur"
-
+        #acyclique avec parcour en largeur
+        pass
     def is_connexe(self): #quentin
-        "connexe"
+        #connexe
+        pass
 
 
 
     def marche_pied(self):#tao
-        "marche à pied"
-
-    def penalites(self):
-        "penalites"
-
-    def max_penalite(self):#4.2
-        "max penalité --> ne pas prenre en compte les pénalités des fictifs"
+        #marche à pied
+        pass
 
     def cout_potentiel(self):
-        "cout potentiel"
+        #cout potentiel
+        pass
 
     def cout_marginaux(self):
-        "cout marginaux"
-
-    def choix_to_fill(self):
-        "choix pour remplir"
+        #cout marginaux
+        pass
 
 

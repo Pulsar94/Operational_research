@@ -41,11 +41,10 @@ class Tab:
             cop.append(lign)
         return cop
 
-    def penalites(self, done_row=[], done_col=[]):#done_row et done_col pos des truc deja rempli
+    def penalites(self, done_row=[], done_col=[]):#done_row et done_col pos des truc deja remplis
         #choix de si c'est une ligne ou une colonne à prendre et renvoie la valeur de la penalité et sa position
         #penalites comprenant les fictifs et les non fictifs pour les lignes
 
-        #vérifier qu'il y a pas de soucis avec les fictifs
         max_row = -1
         pos_max_row = -1
         for i in range(len(self.cout)):  # choix de la ligne max de penalité
@@ -58,7 +57,7 @@ class Tab:
                 else:
                     diff_row = row[1] - row[0]
 
-                if diff_row == max_row:
+                if diff_row == max_row:#cas où il y a plusieurs pénalités identiques
                     res = self.choice_if_equals(pos_max_row, i, 0)
                     if res == 1:
                         max_row = diff_row
@@ -68,6 +67,7 @@ class Tab:
                     max_row = diff_row
                     pos_max_row = i
 
+        #choix de la colonne max en fonction de la pénalité
         max_col = -1
         pos_max_col = -1
         cop = self.copie_tab(self.cout)
@@ -85,7 +85,7 @@ class Tab:
                 else:
                     diff_col = col_cout_transp[i][1] - col_cout_transp[i][0]
 
-                if diff_col == max_col:
+                if diff_col == max_col:#cas où il y a plusieurs pénalités identiques
                     res = self.choice_if_equals(pos_max_col, i, 1)
                     if res == 1:
                         max_col = diff_col
@@ -96,7 +96,7 @@ class Tab:
                     pos_max_col = i
 
         #choix final entre la row te la col
-        if max_row == max_col : #si la pénalité du max col et max row sont = ont fait le choix en fct
+        if max_row == max_col : #cas où les deux max pénalités sont identiques
             res = self.choice_if_equals(pos_max_row, pos_max_col, 3)
             if res == 0:
                 final_take = max_row
@@ -120,7 +120,6 @@ class Tab:
         if choice == 0:
             cmd_max = self.command[pos]
             cmd_diff = self.command[pos_diff]
-            print("cmd_max: ", cmd_max, "  cmd_diff: ", cmd_diff)
             if cmd_diff >= cmd_max:
                 return 1
             else:
@@ -129,34 +128,50 @@ class Tab:
         if choice == 1:
             prv_max = self.provider[pos]
             prv_diff = self.provider[pos_diff]
-            print("prv_max ", prv_max, "prv_diff ", prv_diff)
             if prv_diff >= prv_max:
                 return 1
             else:
                 return 0
-            
+
         if choice == 3:
             final_row = self.command[pos]
             final_col = self.provider[pos_diff]
-            print("final-row et col", final_row, final_col)
             if final_row >= final_col:
                 return 0
             else:
                 return 1
 
+    def fill_with_penalitie_row(self, pos):
+        temp_max = self.cout[pos][0]
+        choix = 0
+        for i in range(len(self.cout[pos])):  # TODO cas où il y a 2 couts identiques
+            if self.cout[pos][i] < temp_max:
+                temp_max = self.cout[pos][i]
+
+
+    def fill_with_penalitie_col(self, pos):
+        pass
+
     def balas_hammer(self): #marc
-        #Balas-Hammer
+        #savoir si il faut des fictifs
         if self.add_fictif()==False:
             print("No need to add fictif")
         else:
             print("Fictif have been added")
+
         #penalites
         choice_pen = self.penalites()
+
+        #remplissage
         if choice_pen[2] == 1:
             print("ligne", choice_pen[1], "avec une penalité de", choice_pen[0])
-        else:
+            self.fill_with_penalitie_row(choice_pen[1])
+
+        if choice_pen[2] == 2:
             print("colonne", choice_pen[1], "avec une penalité de", choice_pen[0])
+            self.fill_with_penalitie_col(choice_pen[1])
         #faire remplir le plus petit continuer et faire des copies et tout
+
 
 
 

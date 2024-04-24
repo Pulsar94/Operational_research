@@ -12,22 +12,6 @@ class Tab:
         #lire fichier txt
         pass
 
-
-    def balas_hammer(self): #marc
-        #Balas-Hammer
-        if self.add_fictif()==False:
-            print("No need to add fictif")
-        else:
-            print("Fictif have been added")
-        #penalites
-        choice_pen = self.penalites()
-        if choice_pen[2] == 1:
-            print("ligne", choice_pen[1], "avec une penalité de", choice_pen[0])
-        else:
-            print("colonne", choice_pen[1], "avec une penalité de", choice_pen[0])
-        #faire remplir le plus petit continuer et faire des copies et tout
-
-
     def is_command_equal_provider(self):#marc
         if sum(self.command) == sum(self.provider):
             return True#commande = fournisseur
@@ -57,56 +41,69 @@ class Tab:
             cop.append(lign)
         return cop
 
-    def penalites(self):#normalement fonctionnelle
+    def penalites(self, done_row=[], done_col=[]):#done_row et done_col pos des truc deja rempli
         #choix de si c'est une ligne ou une colonne à prendre et renvoie la valeur de la penalité et sa position
         #penalites comprenant les fictifs et les non fictifs pour les lignes
 
         #vérifier qu'il y a pas de soucis avec les fictifs
         max_row = -1
         pos_max_row = -1
-
-        for i in range(len(self.cout)):#choix de la ligne max de penalité
-            for j in range(len(self.cout[i])):
+        for i in range(len(self.cout)):  # choix de la ligne max de penalité
+            if i not in done_row:
                 row = self.copie_tab(self.cout[i])
                 row.sort()
-                if row[0] == 0:
-                    diff_row = row[2]-row[1]
-                else:
-                    diff_row = row[1]-row[0]
-                if diff_row > max_row:
-                    max_row = diff_row
-                    pos_max_row = i
+                for j in range(len(row)):
+                    if row[0] == 0:
+                        diff_row = row[2] - row[1]
+                    else:
+                        diff_row = row[1] - row[0]
+                    if diff_row > max_row:
+                        max_row = diff_row
+                        pos_max_row = i
+                    #if diff_row == max_row: TODO : si il y a deux lignes avec la meme pénalité
 
         max_col = -1
         pos_max_col = -1
         cop = self.copie_tab(self.cout)
         col_cout_transp = zip(*cop)#transposer le tableau pour avoir les colonnes sur les lignes plus facile à traiter
-        pos_now = 0 #pour garder la position pour déterminer où est le max
-        for i in col_cout_transp:
-            tab_col = list(i)
-            tab_col.sort()
-            #vérifier si l'ensemble des valeurs n'est pas des 0 donc une colonne fictive
-            cpt = 0
-            for nb_0 in tab_col:
-                if nb_0 == 0:
-                    cpt += 1
-            if cpt != len(tab_col):#on ne prend pas en compte les rajouts de sources fictives
-                if tab_col[0] == 0:
-                    diff_col = tab_col[2]-tab_col[1]
-                else:
-                    diff_col = tab_col[1]-tab_col[0]
-                if diff_col > max_col:
-                    max_col = diff_col
-                    pos_max_col = pos_now
-            pos_now += 1
+        col_cout_transp= list(col_cout_transp)#transformation de la grande liste en un tableau
+        for sous_tab in range(len(col_cout_transp)):#finalisation de préparation en un tableau de 2dim
+            col_cout_transp[sous_tab] = list(col_cout_transp[sous_tab])
+
+        for i in range(len(col_cout_transp)):#même principe que les lignes mais sur le tableau modifié des colonnes
+            if i not in done_col:
+                col_cout_transp[i].sort()
+                for j in range(len(col_cout_transp[i])):
+                    if col_cout_transp[i][0] == 0:
+                        diff_col = col_cout_transp[i][2] - col_cout_transp[i][1]
+                    else:
+                        diff_col = col_cout_transp[i][1] - col_cout_transp[i][0]
+                    if diff_col > max_col:
+                        max_col = diff_col
+                        pos_max_col = i
+                    #if diff_col == max_col:TODO : si il y a deux colonnes avec la meme pénalité
+
         #choix final entre la row te la col
+        print("max_col, max_row", max_col, max_row)
         final_take = max(max_row, max_col)
         if final_take == max_row:
             return final_take, pos_max_row, 1 #1 if it's a row
         else:
             return final_take, pos_max_col, 2 #2 if it's a col
 
-
+    def balas_hammer(self): #marc
+        #Balas-Hammer
+        if self.add_fictif()==False:
+            print("No need to add fictif")
+        else:
+            print("Fictif have been added")
+        #penalites
+        choice_pen = self.penalites()
+        if choice_pen[2] == 1:
+            print("ligne", choice_pen[1], "avec une penalité de", choice_pen[0])
+        else:
+            print("colonne", choice_pen[1], "avec une penalité de", choice_pen[0])
+        #faire remplir le plus petit continuer et faire des copies et tout
 
 
 

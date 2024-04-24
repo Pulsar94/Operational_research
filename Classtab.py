@@ -141,15 +141,24 @@ class Tab:
             else:
                 return 1
 
+    def compare_command_provider_to_fill(self, posx, posy):
+        print("place nb à fill", self.cout[posx][posy])
+        pass
     def fill_with_penalitie_row(self, pos):
-        temp_max = self.cout[pos][0]
-        choix = 0
-        for i in range(len(self.cout[pos])):  # TODO cas où il y a 2 couts identiques
-            if self.cout[pos][i] < temp_max:
-                temp_max = self.cout[pos][i]
+        temp_min = self.cout[pos][0]
+        for i in range(len(self.cout[pos])):  #TODO cas où il y a 2 couts identiques
+            if self.cout[pos][i] < temp_min:
+                temp_min = self.cout[pos][i]
+                y = i
+            if self.cout[pos][i] == temp_min:
+                pass
+        self.compare_command_provider_to_fill(pos, y)
+        print(temp_min, "temp_min")
+
 
 
     def fill_with_penalitie_col(self, pos):
+        print("pas encore fait")
         pass
 
     def balas_hammer(self): #marc

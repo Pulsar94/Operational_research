@@ -91,6 +91,9 @@ class Tab:
         else:
             return final_take, pos_max_col, 2 #2 if it's a col
 
+    def choice_if_equals(self, max, pos, diff, pos_diff):#fct pour faire le choix entre deux lignes pour savoir laquelle choisir
+        pass#TODO pour les pénalités
+
     def balas_hammer(self): #marc
         #Balas-Hammer
         if self.add_fictif()==False:

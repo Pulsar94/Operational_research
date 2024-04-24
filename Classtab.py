@@ -52,15 +52,21 @@ class Tab:
             if i not in done_row:
                 row = self.copie_tab(self.cout[i])
                 row.sort()
-                for j in range(len(row)):
-                    if row[0] == 0:
-                        diff_row = row[2] - row[1]
-                    else:
-                        diff_row = row[1] - row[0]
-                    if diff_row > max_row:
+
+                if row[0] == 0:
+                    diff_row = row[2] - row[1]
+                else:
+                    diff_row = row[1] - row[0]
+
+                if diff_row == max_row:
+                    res = self.choice_if_equals(pos_max_row, i, 0)
+                    if res == 1:
                         max_row = diff_row
                         pos_max_row = i
-                    #if diff_row == max_row: TODO : si il y a deux lignes avec la meme pénalité
+
+                if diff_row > max_row:
+                    max_row = diff_row
+                    pos_max_row = i
 
         max_col = -1
         pos_max_col = -1
@@ -73,26 +79,70 @@ class Tab:
         for i in range(len(col_cout_transp)):#même principe que les lignes mais sur le tableau modifié des colonnes
             if i not in done_col:
                 col_cout_transp[i].sort()
-                for j in range(len(col_cout_transp[i])):
-                    if col_cout_transp[i][0] == 0:
-                        diff_col = col_cout_transp[i][2] - col_cout_transp[i][1]
-                    else:
-                        diff_col = col_cout_transp[i][1] - col_cout_transp[i][0]
-                    if diff_col > max_col:
+
+                if col_cout_transp[i][0] == 0:
+                    diff_col = col_cout_transp[i][2] - col_cout_transp[i][1]
+                else:
+                    diff_col = col_cout_transp[i][1] - col_cout_transp[i][0]
+
+                if diff_col == max_col:
+                    res = self.choice_if_equals(pos_max_col, i, 1)
+                    if res == 1:
                         max_col = diff_col
                         pos_max_col = i
-                    #if diff_col == max_col:TODO : si il y a deux colonnes avec la meme pénalité
+
+                if diff_col > max_col:
+                    max_col = diff_col
+                    pos_max_col = i
 
         #choix final entre la row te la col
-        print("max_col, max_row", max_col, max_row)
-        final_take = max(max_row, max_col)
+        if max_row == max_col : #si la pénalité du max col et max row sont = ont fait le choix en fct
+            res = self.choice_if_equals(pos_max_row, pos_max_col, 3)
+            if res == 0:
+                final_take = max_row
+                return final_take, pos_max_row, 1  # 1 if it's a row
+            else:
+                final_take = max_col
+                return final_take, pos_max_col, 2  # 2 if it's a col
+
+        else:
+            final_take = max(max_row, max_col)
         if final_take == max_row:
             return final_take, pos_max_row, 1 #1 if it's a row
         else:
             return final_take, pos_max_col, 2 #2 if it's a col
 
-    def choice_if_equals(self, max, pos, diff, pos_diff):#fct pour faire le choix entre deux lignes pour savoir laquelle choisir
-        pass#TODO pour les pénalités
+    def choice_if_equals(self, pos, pos_diff, choice=None):#fct pour faire le choix entre deux lignes pour savoir laquelle choisir
+        #prendre celui où plus grande quantité possible
+        #choice=0 --> cas colonne
+        #choice=1 --> cas ligne
+        #choice=3 --> cas combiné
+        if choice == 0:
+            cmd_max = self.command[pos]
+            cmd_diff = self.command[pos_diff]
+            print("cmd_max: ", cmd_max, "  cmd_diff: ", cmd_diff)
+            if cmd_diff >= cmd_max:
+                return 1
+            else:
+                return 0
+
+        if choice == 1:
+            prv_max = self.provider[pos]
+            prv_diff = self.provider[pos_diff]
+            print("prv_max ", prv_max, "prv_diff ", prv_diff)
+            if prv_diff >= prv_max:
+                return 1
+            else:
+                return 0
+            
+        if choice == 3:
+            final_row = self.command[pos]
+            final_col = self.provider[pos_diff]
+            print("final-row et col", final_row, final_col)
+            if final_row >= final_col:
+                return 0
+            else:
+                return 1
 
     def balas_hammer(self): #marc
         #Balas-Hammer

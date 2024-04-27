@@ -43,71 +43,64 @@ class Tab:
             cop.append(lign)
         return cop
 
-    def done_numbers_row(self, row, x):#marc
-        #exclu les nombres déja remplis
-        for i in range(len(row)):
-            if self.content[x][i] != -1:
-                row[i] = -1
-
-
-
-    def penalites(self, done_row, done_col):#done_row et done_col pos des truc deja remplis
-        #choix de si c'est une ligne ou une colonne à prendre et renvoie la valeur de la penalité et sa position
-        #penalites comprenant les fictifs et les non fictifs pour les lignes
-
+    def penalites(self):
         max_row = -1
         pos_max_row = -1
-        for i in range(len(self.cout)):  # choix de la ligne max de penalité
-            if i not in done_row:
-                row = self.copie_tab(self.cout[i])
-                #TODO done numbers à exclure de la ligne
-                row.sort()
-                if row[0] == 0:
-                    diff_row = row[2] - row[1]
-                else:
-                    diff_row = row[1] - row[0]
+        cpt_row = 0
+        copie_cout = self.copie_tab(self.cout)
+        for i in range(len(copie_cout)):
+            for j in range(len(copie_cout[i])):
+                if self.content[i][j] != -1:
+                    copie_cout[i][j] = -1
 
+        for i in range(len(copie_cout)):
+            row = copie_cout[i]
+            row = [nb for nb in row if nb != -1 and nb != 0]
+            row.sort()
+
+            if len(row) >= 2:
+                diff_row = row[1] - row[0]
+                if diff_row > max_row:
+                    max_row = diff_row
+                    pos_max_row = i
                 if diff_row == max_row:#cas où il y a plusieurs pénalités identiques
                     res = self.choice_if_equals(pos_max_row, i, 0)
                     if res == 1:
                         max_row = diff_row
                         pos_max_row = i
+            else:
+                cpt_row += 1
 
-                if diff_row > max_row:
-                    max_row = diff_row
-                    pos_max_row = i
+        col_cout_transp = zip(*copie_cout)  # transposer le tableau pour avoir les colonnes sur les lignes plus facile à traiter
+        col = list(col_cout_transp)  # transformation de la grande liste en un tableau
+        for sous_tab in range(len(col)):  # finalisation de préparation en un tableau de 2dim
+            col[sous_tab] = list(col[sous_tab])
 
-        #choix de la colonne max en fonction de la pénalité
+        cpt_col = 0
         max_col = -1
         pos_max_col = -1
-        cop = self.copie_tab(self.cout)
-        col_cout_transp = zip(*cop)#transposer le tableau pour avoir les colonnes sur les lignes plus facile à traiter
-        col_cout_transp= list(col_cout_transp)#transformation de la grande liste en un tableau
-        for sous_tab in range(len(col_cout_transp)):#finalisation de préparation en un tableau de 2dim
-            col_cout_transp[sous_tab] = list(col_cout_transp[sous_tab])
 
-        for i in range(len(col_cout_transp)):#même principe que les lignes mais sur le tableau modifié des colonnes
-            if i not in done_col:
-                #TODO done numbers à exclure de la colonne
-                col_cout_transp[i].sort()
+        for i in range(len(col)):
+            col_ = [nb for nb in col[i] if nb != -1 and nb != 0]
+            col_.sort()
 
-                if col_cout_transp[i][0] == 0:
-                    diff_col = col_cout_transp[i][2] - col_cout_transp[i][1]
-                else:
-                    diff_col = col_cout_transp[i][1] - col_cout_transp[i][0]
-
-                if diff_col == max_col:#cas où il y a plusieurs pénalités identiques
+            if len(col_) >= 2:
+                diff = col_[1] - col_[0]
+                if diff > max_col:
+                    max_col = diff
+                    pos_max_col = i
+                if diff == max_col:#cas où il y a plusieurs pénalités identiques
                     res = self.choice_if_equals(pos_max_col, i, 1)
                     if res == 1:
-                        max_col = diff_col
+                        max_col = diff
                         pos_max_col = i
+            else:
+                cpt_col += 1
 
-                if diff_col > max_col:
-                    max_col = diff_col
-                    pos_max_col = i
+        if cpt_col == len(col) and cpt_row == len(copie_cout):
+            return -1, -1, -1
 
-        #choix final entre la row te la col
-        if max_row == max_col : #cas où les deux max pénalités sont identiques
+        if max_row == max_col:  # cas où les deux max pénalités sont identiques
             res = self.choice_if_equals(pos_max_row, pos_max_col, 3)
             if res == 0:
                 final_take = max_row
@@ -119,14 +112,17 @@ class Tab:
         else:
             final_take = max(max_row, max_col)
         if final_take == max_row:
-            return final_take, pos_max_row, 1 #1 if it's a row
+            return final_take, pos_max_row, 1  # 1 if it's a row
         else:
-            return final_take, pos_max_col, 2 #2 if it's a col
+            return final_take, pos_max_col, 2  # 2 if it's a col
+
+
+
 
     def choice_if_equals(self, pos, pos_diff, choice=None):#fct pour faire le choix entre deux lignes pour savoir laquelle choisir
         #prendre celui où plus grande quantité possible
-        #choice=0 --> cas colonne
-        #choice=1 --> cas ligne
+        #choice=0 --> cas ligne
+        #choice=1 --> cas colonne
         #choice=3 --> cas combiné
         if choice == 0:
             prv_max = self.provider[pos]
@@ -155,48 +151,65 @@ class Tab:
 
     def find_pos(self, x=-1, y=-1):#trouve le plus petit en fonction de la ligne ou de la colonne
         if y == -1:
-            min = self.cout[x][0]
-            pos = 0
-            for i in range(len(self.cout)):
-                if self.cout[x][i] < min and self.content[x][i] == -1:
+            if self.content[x][0] != -1:
+                for nb in self.cout[x]:
+                    if nb != -1:
+                        min = nb
+                        pos = self.cout[x].index(nb)
+            else:
+                min = self.cout[x][0]
+                pos = 0
+            for i in range(len(self.cout[x])):
+                if self.content[x][i] == -1 and self.cout[x][i] < min and self.cout[x][i] != 0:
                     min = self.cout[x][i]
                     pos = i
             return x, pos
-        else:
-            min = self.cout[0][y]
-            pos = 0
-            for i in range(len(self.cout[0])):
 
-                if self.cout[i][y] < min and self.content[x][i] == -1:
+        else:#quand x = -1
+            if self.content[0][y] != -1:
+                for nb in self.cout:
+                    if nb[y] != -1:
+                        min = nb[y]
+                        pos = self.cout.index(nb)
+            else:
+                min = self.cout[0][y]
+                pos = 0
+            for i in range(len(self.cout)):
+                if self.content[i][y] == -1 and self.cout[i][y] < min and self.cout[i][y] != 0:
                     min = self.cout[i][y]
                     pos = i
             return pos, y
 
-    def fill_BH(self, x, y, done_row, done_col):
+    def fill_BH(self, x, y):
         if self.provider[x] < self.command[y]:
             for i in range(len(self.cout[x])):
                 if self.content[x][i] == -1:#Exclu les valeurs déjà remplies
                     self.content[x][i] = 0
             self.content[x][y] = self.provider[x]
-            done_row.append(x)
+
             self.command[y] -= self.provider[x]
-            return done_row, done_col
+            return
         else:
             for i in range(len(self.cout)):
                 if self.content[i][y] == -1:
                     self.content[i][y] = 0
             self.content[x][y] = self.command[y]
-            done_col.append(y)
             self.provider[x] -= self.command[y]
-            return done_row, done_col
+            return
 
-
-    def verif_done(self):
+    def end_fill(self):
+        to_add = 0
         for i in range(len(self.content)):
             for j in range(len(self.content[0])):
-                if self.content[i][j] == -1:
-                    return False
-        return True
+                if self.content[i][j] != -1:
+                    to_add += self.content[i][j]
+                else:
+                    x = i
+                    y = j
+            if to_add <= self.provider[x]:
+                self.content[x][y] = self.provider[x] - to_add
+            to_add = 0
+
 
     def balas_hammer(self): #marc
         #savoir si il faut des fictifs
@@ -204,38 +217,37 @@ class Tab:
             print("No need to add fictif")
         else:
             print("Fictif have been added")
-        #TODO faire copie de command et provider pour pouvoir modif tranquille et les remettre à la fin
+
+        #copie de provider et command et cout
+        cout_before = []
+        cou_sous_before = []
+        for i in self.cout:
+            for j in i:
+                cou_sous_before.append(j)
+            cout_before.append(cou_sous_before)
+            cou_sous_before = []
+        provider_before = self.copie_tab(self.provider)
+        command_before = self.copie_tab(self.command)
 
         #init -1 self.content
         self.content = [[-1] * len(self.cout[0]) for _ in range(len(self.cout))]
 
-        done_row = []
-        done_col = []
-
-        #copie de provider et command
-        provider_before = self.copie_tab(self.provider)
-        command_before = self.copie_tab(self.command)
-
-        print("\n")
-        while(self.verif_done()==False):
+        while (self.penalites()!=(-1, -1, -1)):
             #penalites
-            choice_pen = self.penalites(done_row, done_col)
+            choice_pen = self.penalites()
 
             #remplissage
             if choice_pen[2] == 1:
                 print("ligne", choice_pen[1], "avec une penalité de", choice_pen[0])
                 nb_to_fill = self.find_pos(choice_pen[1])#obtention de x et y du nombre à fill
-                print("cout le plus bas à remplir", self.cout[nb_to_fill[0]][nb_to_fill[1]])
-                self.fill_BH(nb_to_fill[0], nb_to_fill[1], done_row, done_col)
+                print("cout le plus bas à remplir ", self.cout[nb_to_fill[0]][nb_to_fill[1]], "x", nb_to_fill[0], "y", nb_to_fill[1])
+                self.fill_BH(nb_to_fill[0], nb_to_fill[1])
 
             else:
                 print("colonne", choice_pen[1], "avec une penalité de", choice_pen[0])
                 nb_to_fill = self.find_pos(-1, choice_pen[1])
-                print("cout le plus bas à replir __", self.cout[nb_to_fill[0]][nb_to_fill[1]])
-                self.fill_BH(nb_to_fill[0], nb_to_fill[1], done_row, done_col)
-
-            print("done_row", done_row)
-            print("done_col", done_col)
+                print("cout le plus bas à remplir ", self.cout[nb_to_fill[0]][nb_to_fill[1]], "x", nb_to_fill[0], "y", nb_to_fill[1])
+                self.fill_BH(nb_to_fill[0], nb_to_fill[1])
             print("cout", self.cout)
             print("content", self.content)
             print("command", self.command)
@@ -244,7 +256,16 @@ class Tab:
 
         self.command = command_before
         self.provider = provider_before
+        self.cout = cout_before
 
+        self.end_fill()#remplissage des cases vides
+
+        print("\n")
+        print("cout", self.cout)
+        print("content", self.content)
+        print("command", self.command)
+        print("provider", self.provider)
+        print("\n")
 
 
 

@@ -7,7 +7,7 @@ class Tab:
 
         #ajouter des trucs si besoin
 
-#faire les fonctions affiches --> tibitou
+    #faire les fonctions affiches --> tibitou
     def txt_to_tab(self): #tibitou
         #lire fichier txt
         pass
@@ -16,7 +16,6 @@ class Tab:
         if sum(self.command) == sum(self.provider):
             return True#commande = fournisseur
         return False#commande != fournisseur
-
 
     def add_fictif(self):
         #command/provider fictif
@@ -116,9 +115,6 @@ class Tab:
         else:
             return final_take, pos_max_col, 2  # 2 if it's a col
 
-
-
-
     def choice_if_equals(self, pos, pos_diff, choice=None):#fct pour faire le choix entre deux lignes pour savoir laquelle choisir
         #prendre celui où plus grande quantité possible
         #choice=0 --> cas ligne
@@ -147,7 +143,6 @@ class Tab:
                 return 0
             else:
                 return 1
-
 
     def find_pos(self, x=-1, y=-1):#trouve le plus petit en fonction de la ligne ou de la colonne
         if y == -1:
@@ -210,7 +205,6 @@ class Tab:
                 self.content[x][y] = self.provider[x] - to_add
             to_add = 0
 
-
     def balas_hammer(self): #marc
         #savoir si il faut des fictifs
         if self.add_fictif()==False:
@@ -267,8 +261,6 @@ class Tab:
         print("provider", self.provider)
         print("\n")
 
-
-
     def nord_ouest(self): #quentin
         #nord ouest
         pass
@@ -277,8 +269,6 @@ class Tab:
         #acyclique avec parcour en largeur
         pass
     
-
-
     def is_connexe(self, virtual):
         node_count = len(self.provider) + len(self.command)
         edge_count = 0

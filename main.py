@@ -47,12 +47,11 @@ print(tab.provider," provider \n")
 print(tab.content," content \n")
 print(tab.cout, "cout \n")
 """
-tab.rand_fill(3)
-tab.balas_hammer()
-print("stepping stone")
-tab.stepping_stone()
-tab.show_tab()
-print("\n")
+n = 400
+time1, time2 = tab.calculate_time(n)
+print("Complexity: ", n)
+print("Generating Balas:",round(time1,3), "seconds")
+print("Stepping Stone:",round(time2,3), "seconds")
 """
 print(tab.command, " command \n")
 print(tab.provider, " provider \n")

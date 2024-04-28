@@ -1,4 +1,5 @@
 import random
+import time
 
 class Tab:
     def __init__(self):
@@ -21,12 +22,21 @@ class Tab:
                 self.provider.append(providerDebt)
                 self.command.append(commandDebt)
             else:
-                self.command.append(random.randint(1, int(commandDebt/(n-i+1))))
-                self.provider.append(random.randint(1, int(providerDebt/(n-i+1))))
+                self.command.append(random.randint(1, int(commandDebt/(n-i-1))))
+                self.provider.append(random.randint(1, int(providerDebt/(n-i-1))))
                 commandDebt -= self.command[i]
                 providerDebt -= self.provider[i]
             for j in range(n):
                 self.cout[i][j] = random.randint(1, 100)
+    
+    def calculate_time(self, n):
+        starting_time = time.time()
+        self.rand_fill(n)
+        self.balas_hammer()
+        balas_time = time.time() - starting_time
+        self.stepping_stone()
+        stepping_time = time.time() - starting_time - balas_time
+        return balas_time, stepping_time
 
     def show_tab(self):
         print("\t\t\t", end = "")
@@ -226,25 +236,25 @@ class Tab:
 
     def end_fill(self):
         to_add = 0
+        x = -1
+        y = -1
         for i in range(len(self.content)):
-            x, y = False, False
             for j in range(len(self.content[0])):
-                if self.content[i][j] != -1:
-                    to_add += self.content[i][j]
-                else:
-                    x, y = i, j
-            if x and to_add <= self.provider[x]:
-                self.content[x][y] = self.provider[x]
-            to_add = 0
+                if self.content[i][j] == -1:
+                    for nb in range(len(self.cout[i])):
+                        if self.content[i][nb] != -1:
+                            to_add += self.content[i][nb]
+                        else:
+                            x = i
+                            y = nb
+                    if x != -1 and y != -1:
+                        self.content[x][y] = self.provider[x] - to_add
+                    to_add = 0
+                    x = -1
+                    y = -1
+        return
 
     def balas_hammer(self): #marc
-        #savoir si il faut des fictifs
-        if self.add_fictif()==False:
-            print("No need to add fictif")
-        else:
-            print("Fictif have been added")
-
-        #copie de provider et command et cout
         cout_before = []
         cou_sous_before = []
         for i in self.cout:
@@ -264,21 +274,21 @@ class Tab:
 
             #remplissage
             if choice_pen[2] == 1:
-                print("ligne", choice_pen[1], "avec une penalité de", choice_pen[0])
+                #print("ligne", choice_pen[1], "avec une penalité de", choice_pen[0])
                 nb_to_fill = self.find_pos(choice_pen[1])#obtention de x et y du nombre à fill
-                print("cout le plus bas à remplir ", self.cout[nb_to_fill[0]][nb_to_fill[1]], "x", nb_to_fill[0], "y", nb_to_fill[1])
+                #print("cout le plus bas à remplir ", self.cout[nb_to_fill[0]][nb_to_fill[1]], "x", nb_to_fill[0], "y", nb_to_fill[1])
                 self.fill_BH(nb_to_fill[0], nb_to_fill[1])
 
             else:
-                print("colonne", choice_pen[1], "avec une penalité de", choice_pen[0])
+                #print("colonne", choice_pen[1], "avec une penalité de", choice_pen[0])
                 nb_to_fill = self.find_pos(-1, choice_pen[1])
-                print("cout le plus bas à remplir ", self.cout[nb_to_fill[0]][nb_to_fill[1]], "x", nb_to_fill[0], "y", nb_to_fill[1])
+                #print("cout le plus bas à remplir ", self.cout[nb_to_fill[0]][nb_to_fill[1]], "x", nb_to_fill[0], "y", nb_to_fill[1])
                 self.fill_BH(nb_to_fill[0], nb_to_fill[1])
-            print("cout", self.cout)
-            print("content", self.content)
-            print("command", self.command)
-            print("provider", self.provider)
-            print("\n")
+            #print("cout", self.cout)
+            #print("content", self.content)
+            #print("command", self.command)
+            #print("provider", self.provider)
+            #print("\n")
 
         self.command = command_before
         self.provider = provider_before
@@ -286,12 +296,12 @@ class Tab:
 
         self.end_fill()#remplissage des cases vides
 
-        print("\n")
-        print("cout", self.cout)
-        print("content", self.content)
-        print("command", self.command)
-        print("provider", self.provider)
-        print("balas done\n")
+        #print("\n")
+        #print("cout", self.cout)
+        #print("content", self.content)
+        #print("command", self.command)
+        #print("provider", self.provider)
+        #print("balas done\n")
 
     def nord_ouest(self): #quentin
         #nord ouest
@@ -308,8 +318,7 @@ class Tab:
             for j in range(len(self.command)):
                 if self.content[i][j] > 0 or (i,j) in virtual:
                     edge_count += 1
-        
-        return edge_count == node_count - 1
+        return edge_count >= node_count - 1
     
     def set_connexe(self):
         virtual = []
@@ -322,12 +331,15 @@ class Tab:
             return node
 
         while not self.is_connexe(virtual):
+            if add_fictif() in virtual:
+                return False
             virtual.append(add_fictif())
 
         return virtual
     
     def acquire_data_value(self, virtual):
         value_provider = {0:0}
+        value_provider_copy = {0:0}
         value_command = {}
 
         def set_value(i,j):
@@ -349,6 +361,9 @@ class Tab:
                 for j in range(len(self.command)):
                     if ((i,j) in virtual or self.content[i][j] > 0) and set_value(i,j):
                         loop = True
+            if value_provider_copy == value_provider:
+                return False, False
+            value_provider_copy = value_provider.copy()
         
         return value_command, value_provider
                     
@@ -373,10 +388,16 @@ class Tab:
         path.pop(-1)
         debt = self.content[path[-1][0]][path[-1][1]]
         negative = True
+
+        if debt <= 0:
+            return False
     
         self.content[start_node[0]][start_node[1]] = debt
         for node in path:
             self.content[node[0]][node[1]] += -debt if negative else debt
+            if self.content[node[0]][node[1]] < 0:
+                debt += self.content[node[0]][node[1]]
+                self.content[node[0]][node[1]] = 0
             negative = not negative
 
     def get_cyclic_path(self, new_node, virtual):
@@ -425,8 +446,13 @@ class Tab:
         loop = True
         while loop:
             virtual_links = self.set_connexe()
+            if virtual_links == False:
+                break
             value_command, value_provider = self.acquire_data_value(virtual_links)
+            if value_command == False:
+                break
             potential_cost = self.cout_potentiel(value_command, value_provider)
             marginal_cost = self.cout_marginaux(potential_cost)
             loop = self.update_content(marginal_cost, virtual_links)
-        print("content:", self.content)
+        
+        return True

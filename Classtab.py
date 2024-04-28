@@ -1,3 +1,5 @@
+import random
+
 class Tab:
     def __init__(self):
         self.content = []#contenu du tableau --> 1 ligne 1 tableau en plus
@@ -6,6 +8,36 @@ class Tab:
         self.provider = [] #total des fournisseurs par colonnes [0]=total F1
 
         #ajouter des trucs si besoin
+
+    def rand_fill(self, n):#remplissage aléatoire
+        totalValue = n + random.randint(100, 10000)
+        commandDebt = totalValue
+        providerDebt = totalValue
+
+        for i in range(n):
+            self.cout.append([0] * n)
+            self.content.append([-1] * n)
+            if i == n-1:
+                self.provider.append(providerDebt)
+                self.command.append(commandDebt)
+            else:
+                self.command.append(random.randint(1, int(commandDebt/(n-i+1))))
+                self.provider.append(random.randint(1, int(providerDebt/(n-i+1))))
+                commandDebt -= self.command[i]
+                providerDebt -= self.provider[i]
+            for j in range(n):
+                self.cout[i][j] = random.randint(1, 100)
+
+    def show_tab(self):
+        print("\t\t\t", end = "")
+        for i in range(len(self.command)):
+            print("C"+str(i), end="\t\t\t")
+        print("SL\n")
+        
+        for i in range(len(self.provider)):
+            print("\nS"+str(i), end="\t\t\t")
+            for j in range(len(self.command)):
+                print(str(self.content[i][j])+ " (" + str(self.cout[i][j])+")", end="\t\t\t")
 
     #faire les fonctions affiches --> tibitou
     def txt_to_tab(self): #tibitou
@@ -195,14 +227,14 @@ class Tab:
     def end_fill(self):
         to_add = 0
         for i in range(len(self.content)):
+            x, y = False, False
             for j in range(len(self.content[0])):
                 if self.content[i][j] != -1:
                     to_add += self.content[i][j]
                 else:
-                    x = i
-                    y = j
-            if to_add <= self.provider[x]:
-                self.content[x][y] = self.provider[x] - to_add
+                    x, y = i, j
+            if x and to_add <= self.provider[x]:
+                self.content[x][y] = self.provider[x]
             to_add = 0
 
     def balas_hammer(self): #marc
@@ -259,7 +291,7 @@ class Tab:
         print("content", self.content)
         print("command", self.command)
         print("provider", self.provider)
-        print("\n")
+        print("balas done\n")
 
     def nord_ouest(self): #quentin
         #nord ouest
@@ -346,7 +378,6 @@ class Tab:
         for node in path:
             self.content[node[0]][node[1]] += -debt if negative else debt
             negative = not negative
-
 
     def get_cyclic_path(self, new_node, virtual):
         virtual.append(new_node)

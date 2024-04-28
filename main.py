@@ -14,7 +14,7 @@ tab.provider = [450,
                 550,
                 700]#manque 700 par rapport au command
 """
-
+"""
 tab.cout = [[15, 9, 8],
             [2, 5, 2],
             [3, 1, 6]]
@@ -23,7 +23,7 @@ tab.provider = [630,
                 650, 
                 660]
 """
-
+"""
 tab.cout = [[15, 8, 3],
             [14, 8, 3],
             [13, 4, 3]]
@@ -47,8 +47,11 @@ print(tab.provider," provider \n")
 print(tab.content," content \n")
 print(tab.cout, "cout \n")
 """
-
+tab.rand_fill(3)
 tab.balas_hammer()
+print("stepping stone")
+tab.stepping_stone()
+tab.show_tab()
 print("\n")
 """
 print(tab.command, " command \n")

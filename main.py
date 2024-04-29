@@ -3,7 +3,8 @@ faire le pseudo code demandé par dans la consigne
 """
 
 from Classtab import Tab
-
+import os
+import time
 tab = Tab()
 """
 tab.cout = [[6, 3, 8],
@@ -41,21 +42,32 @@ tab.provider = [800,
                 700, 
                 300]
 """
-"""
-print(tab.command," command \n")
-print(tab.provider," provider \n")
-print(tab.content," content \n")
-print(tab.cout, "cout \n")
-"""
-n = 400
-time1, time2 = tab.calculate_time(n)
-print("Complexity: ", n)
-print("Generating Balas:",round(time1,3), "seconds")
-print("Stepping Stone:",round(time2,3), "seconds")
-"""
-print(tab.command, " command \n")
-print(tab.provider, " provider \n")
-print(tab.cout, "cout \n")
-print(tab.content, " content \n")
 
-"""
+
+def store_time(n, time1, time2, time3, t):
+    if not os.path.exists("time"):
+        os.makedirs("time")
+
+    with open("time/size_"+str(n)+"_t_"+str(t)+".txt", "w") as f:
+        f.write(str(n) + "\n" + str(time1) + "\n" + str(time2) + "\n" + str(time3))
+
+
+def optimise_test():
+    start_time = time.time()
+    n = 4
+    t = 1
+    while True:
+        time1, time2, time3 = Tab().calculate_time(n)
+        print("Complexity: ", n)
+        print("Generating Nord_ouest:",round(time3,3), "seconds")
+        print("Generating Balas:",round(time1,3), "seconds")
+        print("Stepping Stone:",round(time2,3), "seconds")
+        store_time(n, time1, time2, time3, t)
+        n *= 2
+        if n > 10000:
+            store_time(999999999, time.time() - start_time, time.time() - start_time, time.time() - start_time, t)
+            n = 2
+            t += 1
+
+#RIP IN PEPERONI
+optimise_test()

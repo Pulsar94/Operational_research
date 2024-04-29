@@ -32,11 +32,19 @@ class Tab:
     def calculate_time(self, n):
         starting_time = time.time()
         self.rand_fill(n)
+        temp_command = self.command.copy()
+        temp_provider = self.provider.copy()
+        self.nord_ouest()
+        nord_time = time.time() - starting_time
+
+        starting_time = time.time()
+        self.command = temp_command
+        self.provider = temp_provider
         self.balas_hammer()
         balas_time = time.time() - starting_time
         self.stepping_stone()
         stepping_time = time.time() - starting_time - balas_time
-        return balas_time, stepping_time
+        return balas_time, stepping_time, nord_time
 
     def show_tab(self):
         print("\t\t\t", end = "")
@@ -260,13 +268,9 @@ class Tab:
         provider_temp = self.provider
         if sum(command_temp) > sum(provider_temp) : 
             provider_temp.append(sum(command_temp)-sum(provider_temp))
-            print("Avec ajout d'un provider en plus")
-            print(provider_temp)
 
         if sum(command_temp) < sum(provider_temp) : 
             command_temp.append(sum(provider_temp)-sum(command_temp))
-            print("Avec ajout d'une commande en plus")
-            print(command_temp)
 
         providersize = len(provider_temp)
         commandsize = len(command_temp)
@@ -289,7 +293,11 @@ class Tab:
                 self.content[cpt_provider][cpt_command] = command_temp[cpt_command]
                 cpt_provider += 1
                 cpt_command += 1
-                print(self.content)
+        
+        for i in range(len(self.content)):
+            for j in range(len(self.content[0])):
+                if self.content[i][j] == -1:
+                    self.content[i][j] = 0
         return
 
     def balas_hammer(self): #marc

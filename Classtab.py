@@ -254,6 +254,44 @@ class Tab:
                     y = -1
         return
 
+
+    def nord_ouest(self):
+        command_temp = self.command
+        provider_temp = self.provider
+        if sum(command_temp) > sum(provider_temp) : 
+            provider_temp.append(sum(command_temp)-sum(provider_temp))
+            print("Avec ajout d'un provider en plus")
+            print(provider_temp)
+
+        if sum(command_temp) < sum(provider_temp) : 
+            command_temp.append(sum(provider_temp)-sum(command_temp))
+            print("Avec ajout d'une commande en plus")
+            print(command_temp)
+
+        providersize = len(provider_temp)
+        commandsize = len(command_temp)
+        for i in range(providersize):
+            self.content.append([0] * commandsize)
+        
+        cpt_provider = 0
+        cpt_command = 0
+
+        while cpt_provider < providersize and cpt_command < commandsize:
+            if provider_temp[cpt_provider] < command_temp[cpt_command]:
+                self.content[cpt_provider][cpt_command] = provider_temp[cpt_provider]
+                command_temp[cpt_command] -= self.content[cpt_provider][cpt_command]
+                cpt_provider += 1
+            elif provider_temp[cpt_provider] > command_temp[cpt_command]:
+                self.content[cpt_provider][cpt_command] = command_temp[cpt_command]
+                provider_temp[cpt_provider] -= self.content[cpt_provider][cpt_command]
+                cpt_command += 1
+            else:  
+                self.content[cpt_provider][cpt_command] = command_temp[cpt_command]
+                cpt_provider += 1
+                cpt_command += 1
+                print(self.content)
+        return
+
     def balas_hammer(self): #marc
         cout_before = []
         cou_sous_before = []
@@ -278,7 +316,6 @@ class Tab:
                 nb_to_fill = self.find_pos(choice_pen[1])#obtention de x et y du nombre à fill
                 #print("cout le plus bas à remplir ", self.cout[nb_to_fill[0]][nb_to_fill[1]], "x", nb_to_fill[0], "y", nb_to_fill[1])
                 self.fill_BH(nb_to_fill[0], nb_to_fill[1])
-
             else:
                 #print("colonne", choice_pen[1], "avec une penalité de", choice_pen[0])
                 nb_to_fill = self.find_pos(-1, choice_pen[1])
@@ -302,10 +339,6 @@ class Tab:
         #print("command", self.command)
         #print("provider", self.provider)
         #print("balas done\n")
-
-    def nord_ouest(self): #quentin
-        #nord ouest
-        pass
 
     def is_acyclic(self): #quentin
         #acyclique avec parcour en largeur

@@ -57,11 +57,43 @@ class Tab:
         pass
 
 
+    def nord_ouest(self):
+        command_temp = self.command
+        provider_temp = self.provider
+        if sum(command_temp) > sum(provider_temp) : 
+            provider_temp.append(sum(command_temp)-sum(provider_temp))
+            print("Avec ajout d'un provider en plus")
+            print(provider_temp)
 
+        if sum(command_temp) < sum(provider_temp) : 
+            command_temp.append(sum(provider_temp)-sum(command_temp))
+            print("Avec ajout d'une commande en plus")
+            print(command_temp)
 
-    def nord_ouest(self): #quentin
-        #nord ouest
-        pass
+        providersize = len(provider_temp)
+        commandsize = len(command_temp)
+        for i in range(providersize):
+            self.content.append([0] * commandsize)
+        
+        cpt_provider = 0
+        cpt_command = 0
+
+        while cpt_provider < providersize and cpt_command < commandsize:
+            if provider_temp[cpt_provider] < command_temp[cpt_command]:
+                self.content[cpt_provider][cpt_command] = provider_temp[cpt_provider]
+                command_temp[cpt_command] -= self.content[cpt_provider][cpt_command]
+                cpt_provider += 1
+            elif provider_temp[cpt_provider] > command_temp[cpt_command]:
+                self.content[cpt_provider][cpt_command] = command_temp[cpt_command]
+                provider_temp[cpt_provider] -= self.content[cpt_provider][cpt_command]
+                cpt_command += 1
+            else:  
+                self.content[cpt_provider][cpt_command] = command_temp[cpt_command]
+                cpt_provider += 1
+                cpt_command += 1
+                print(self.content)
+        return
+
 
     def is_acyclic(self): #quentin
         #acyclique avec parcour en largeur

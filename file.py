@@ -140,9 +140,10 @@ def traces_execution():
                 # Write the cost table to the file
                 # Redirect the std output to the file
                 with contextlib.redirect_stdout(f):
-                    problem_table.txt_to_tab()
+                    problem_table.display_tab()
                     print("\n")
 
                 f.write("------------- Etape 2 : Nord-Ouest -------------\n")
-
+                # TODO : Implement the North-West algorithm
                 f.write("\n----------- Etape 3 : Balas-Hammer -----------\n")
+                # TODO : Implement the Balas-Hammer algorithm

@@ -58,8 +58,8 @@ class Tab:
                 print(str(self.content[i][j])+ " (" + str(self.cout[i][j])+")", end="\t\t\t")
 
     #faire les fonctions affiches --> tibitou
-    def txt_to_tab(self): #tibitou
-        #lire fichier txt
+    def display_tab(self): #tibitou
+        # TODO: afficher tableau cout et tableau content
         pass
 
     def is_command_equal_provider(self):#marc

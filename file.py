@@ -83,12 +83,16 @@ def problem_initialization(num_file):
     :return nodes, graph, start_node, end_node:
     """
     # read file
-    constraint_table = read_file("./constraint_tables/table_ " + str(num_file) + ".txt")
+    constraint_table = read_file("Operational_research/constraint_tables/table_" + str(num_file) + ".txt")
 
     # initialize problem table
     tab_problem = Tab()
 
     # add cout to the problem table
+    for i in range(0, len(constraint_table)):
+        for j in range(0, len(constraint_table[i])):
+            pass
+            # tab_problem.cout.append([constraint_table[i][j]])
 
     # add command to the problem table
 

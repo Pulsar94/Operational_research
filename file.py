@@ -38,8 +38,7 @@ def read_file(filename):
             # splitting each steps by space
             steps[i] = steps[i][0].split(' ')
             # recursive function to remove empty string and counter out of range
-            for i in range(len(steps)):
-                steps[i] = remove_empty_strings(steps[i])
+            steps[i] = remove_empty_strings(steps[i])
 
     # converting the second element (weight) of each step to int
     for i in range(0, len(steps)):
@@ -80,22 +79,70 @@ def problem_initialization(num_file):
     """
     Initialize the problem with the constraint table
     :param num_file: number of the file to read
-    :return nodes, graph, start_node, end_node:
+    :return problem_table: the problem table
     """
     # read file
-    constraint_table = read_file("Operational_research/constraint_tables/table_" + str(num_file) + ".txt")
+    constraint_table = read_file("./constraint_tables/table_" + str(num_file) + ".txt")
 
     # initialize problem table
     tab_problem = Tab()
 
     # add cout to the problem table
-    for i in range(0, len(constraint_table)):
-        for j in range(0, len(constraint_table[i])):
-            pass
-            # tab_problem.cout.append([constraint_table[i][j]])
+    # len(constraint_table) - 1 to avoid the last line which is specific to command
+    for i in range(0, len(constraint_table) - 1):
+        temporary_list = []
+        # len(constraint_table[i]) - 1 to avoid the last element which is specific to provider
+        for j in range(0, len(constraint_table[i]) - 1):
+            temporary_list.append(constraint_table[i][j])
+        # append the temporary list of cost to the problem table cost section
+        tab_problem.cout.append(temporary_list)
 
     # add command to the problem table
+    # len(constraint_table[-1]) to get the last line which is the total of a specific command
+    for i in range(0, len(constraint_table[-1])):
+        tab_problem.command.append(constraint_table[-1][i])
 
     # add provider to the problem table
+    # len(constraint_table) - 1 to avoid the last line (command) and get all the providers
+    for i in range(0, len(constraint_table) - 1):
+        tab_problem.provider.append(constraint_table[i][-1])
 
     return tab_problem
+
+
+def traces_execution():
+    """
+    Test all the functions and write all the result in txt file
+    :param: None
+    """
+    # Check if the directory contain all the test files : to know if the file traces.txt already exists
+    # path of the directory
+    path = "traces_execution"
+    # Check if the directory exists
+    if not os.path.exists(path):
+        os.makedirs(path)
+    # Getting the list of directories
+    dir_traces = os.listdir(path)
+    # Checking if the list of directories contains all the test files
+    if len(dir_traces) < 12:
+
+        # Running the function for each file
+        for num_file in range(1, 13):
+            problem_table = problem_initialization(num_file)
+            with open("traces_execution/trace_table_" + str(num_file) + ".txt", "w", encoding="utf-8") as f:
+                f.write("----------- Etape 1 : Lecture & affichage de la table de contrainte -----------\n")
+                # Number of providers
+                f.write(f"Nombre de producteurs : {len(problem_table.provider)}\n")
+
+                # Number of commands
+                f.write(f"Nombre de commandes : {len(problem_table.command)}\n")
+
+                # Write the cost table to the file
+                # Redirect the std output to the file
+                with contextlib.redirect_stdout(f):
+                    problem_table.txt_to_tab()
+                    print("\n")
+
+                f.write("------------- Etape 2 : Nord-Ouest -------------\n")
+
+                f.write("\n----------- Etape 3 : Balas-Hammer -----------\n")

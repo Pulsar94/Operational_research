@@ -3,9 +3,17 @@ faire le pseudo code demandé par dans la consigne
 """
 
 from Classtab import Tab
+from file import problem_initialization, input_file, traces_execution
 import os
 import time
-tab = Tab()
+
+# ------------------------- Reading file and start of the program -------------------------
+traces_execution()
+os.system('cls')
+num_file = input_file()
+problem_table = problem_initialization(num_file)
+
+
 """
 tab.cout = [[6, 3, 8],
             [5, 7, 4],

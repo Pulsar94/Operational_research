@@ -26,10 +26,10 @@ def optimise_test():
     t = 1
     while True:
         time1, time2, time3 = Tab().calculate_time(n)
-        print("Complexity: ", n)
-        print("Generating Nord_ouest:",round(time3,3), "seconds")
-        print("Generating Balas-Hammer:",round(time1,3), "seconds")
-        print("Stepping Stone:",round(time2,3), "seconds")
+        print("Complexité: ", n)
+        print("Généré avec Nord ouest:",round(time3,3), "seconds")
+        print("Généré avec Balas-Hammer:",round(time1,3), "seconds")
+        print("Marche pied:",round(time2,3), "seconds")
         store_time(n, time1, time2, time3, t)
         n *= 2
         if n > 10000:
@@ -39,31 +39,29 @@ def optimise_test():
 
 def display_menu():
     print("\n--- MENU ---")
-
-    print("Choisir une méthode d'initialisation")
     print("1. Initialisation avec Nord-Ouest")
     print("2. Initialisation avec Balas-Hammer")
-    print("3. Marche pied method")
-    print("4. Marche pied with complexity calculation")
-    print("5. Change constraint table")
-    print("6. Exit")
+    print("3. Méthode du marche pied")
+    print("4. Marche pied avec calcul de la complexité")
+    print("5. Changer la table des contraintes")
+    print("6. Quitter")
 
 def main():
     problem_table = load_problem_table()
     while True:
         display_menu()
-        choice = int(input("Enter your choice: "))
+        choice = int(input("Saisissez votre choix : "))
         if choice == 1:
             problem_table.nord_ouest()
             problem_table.print_tab()
-            print("Initialization done with Nord-Ouest method.")
+            print("Initialisation par la méthode Nord-Ouest.")
         elif choice == 2:
             problem_table.balas_hammer()
             problem_table.print_tab()
-            print("Initialization done with Balas-Hammer method.")
+            print("Initialisation par la méthode Balas-Hammer.")
         elif choice == 3:
             if problem_table.content == []:
-                print("Please initialize the table first!")
+                print("Veuillez d'abord initialiser le tableau!")
             else:
                 problem_table.stepping_stone()
                 problem_table.print_tab()
@@ -72,10 +70,10 @@ def main():
         elif choice ==5 :
             problem_table = load_problem_table()
         elif choice == 6:
-            print("Exiting...")
+            print("Sortie...")
             break
         else:
-            print("Invalid choice. Please try again.")
+            print("Choix non valide. Veuillez réessayer.")
 
 if __name__ == "__main__":
     main()

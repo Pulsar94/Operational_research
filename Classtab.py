@@ -47,20 +47,17 @@ class Tab:
         return balas_time, stepping_time, nord_time
 
     def print_tab(self):
-        # En-tête du tableau
         print("x", end="\t")
         for i in range(len(self.provider)):
             print("C" + str(i + 1), end="\t")
         print("Prov.")
 
-        # Lignes du tableau
         for i in range(len(self.provider)):
             print("P" + str(i + 1), end="\t")
             for j in range(len(self.command)):
                 print(str(self.content[i][j]) + "(" + str(self.cout[i][j]) + ")", end="\t")
             print(self.provider[i])
 
-        # Pied du tableau
         print("Com.", end="\t")
         for i in range(len(self.command)):
             print(self.command[i], end="\t")

@@ -28,7 +28,7 @@ def optimise_test():
         time1, time2, time3 = Tab().calculate_time(n)
         print("Complexity: ", n)
         print("Generating Nord_ouest:",round(time3,3), "seconds")
-        print("Generating Balas:",round(time1,3), "seconds")
+        print("Generating Balas-Hammer:",round(time1,3), "seconds")
         print("Stepping Stone:",round(time2,3), "seconds")
         store_time(n, time1, time2, time3, t)
         n *= 2
@@ -38,11 +38,11 @@ def optimise_test():
             t += 1
 
 def display_menu():
-    print("\n--- Initialisation ---")
+    print("\n--- MENU ---")
 
     print("Choisir une méthode d'initialisation")
     print("1. Initialisation avec Nord-Ouest")
-    print("2. Initialisation avec Balas-Amer")
+    print("2. Initialisation avec Balas-Hammer")
     print("3. Marche pied method")
     print("4. Marche pied with complexity calculation")
     print("5. Change constraint table")
@@ -54,24 +54,20 @@ def main():
         display_menu()
         choice = int(input("Enter your choice: "))
         if choice == 1:
-            # Initialize with Nord-Ouest method
             problem_table.nord_ouest()
             problem_table.print_tab()
             print("Initialization done with Nord-Ouest method.")
         elif choice == 2:
-            # Initialize with Balas-Amer method
             problem_table.balas_hammer()
             problem_table.print_tab()
-            print("Initialization done with Balas-Amer method.")
+            print("Initialization done with Balas-Hammer method.")
         elif choice == 3:
-            # Display table content
             if problem_table.content == []:
                 print("Please initialize the table first!")
             else:
                 problem_table.stepping_stone()
                 problem_table.print_tab()
         elif choice == 4:
-            # Marche pied with complexity calculation
             optimise_test()
         elif choice ==5 :
             problem_table = load_problem_table()

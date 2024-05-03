@@ -1,7 +1,3 @@
-"""
-faire le pseudo code demandé par dans la consigne
-"""
-
 from Classtab import Tab
 from file import problem_initialization, input_file, traces_execution
 import os
@@ -9,47 +5,11 @@ import time
 
 # ------------------------- Reading file and start of the program -------------------------
 traces_execution()
-os.system('cls')
-num_file = input_file()
-problem_table = problem_initialization(num_file)
+def load_problem_table():
+    os.system('cls')
+    num_file = input_file()
+    return problem_initialization(num_file)
 
-
-"""
-tab.cout = [[6, 3, 8],
-            [5, 7, 4],
-            [8, 2, 3]]
-tab.command = [500, 240, 610, 350]#manque 350 par rapport au provider
-tab.provider = [450,
-                550,
-                700]#manque 700 par rapport au command
-"""
-"""
-tab.cout = [[15, 9, 8],
-            [2, 5, 2],
-            [3, 1, 6]]
-tab.command = [900, 140, 1000]
-tab.provider = [630,
-                650, 
-                660]
-"""
-"""
-tab.cout = [[15, 8, 3],
-            [14, 8, 3],
-            [13, 4, 3]]
-tab.command = [600, 700, 400]
-tab.provider = [400,
-                700,
-                600]
-"""
-"""
-tab.cout = [[15, 8, 3], 
-            [8, 6, 2], 
-            [3, 4, 1]]
-tab.command = [700, 600, 400]
-tab.provider = [800, 
-                700, 
-                300]
-"""
 
 
 def store_time(n, time1, time2, time3, t):
@@ -77,5 +37,49 @@ def optimise_test():
             n = 2
             t += 1
 
-#RIP IN PEPERONI
-optimise_test()
+def display_menu():
+    print("\n--- Initialisation ---")
+
+    print("Choisir une méthode d'initialisation")
+    print("1. Initialisation avec Nord-Ouest")
+    print("2. Initialisation avec Balas-Amer")
+    print("3. Marche pied method")
+    print("4. Marche pied with complexity calculation")
+    print("5. Change constraint table")
+    print("6. Exit")
+
+def main():
+    problem_table = load_problem_table()
+    while True:
+        display_menu()
+        choice = int(input("Enter your choice: "))
+        if choice == 1:
+            # Initialize with Nord-Ouest method
+            problem_table.nord_ouest()
+            problem_table.print_tab()
+            print("Initialization done with Nord-Ouest method.")
+        elif choice == 2:
+            # Initialize with Balas-Amer method
+            problem_table.balas_hammer()
+            problem_table.print_tab()
+            print("Initialization done with Balas-Amer method.")
+        elif choice == 3:
+            # Display table content
+            if problem_table.content == []:
+                print("Please initialize the table first!")
+            else:
+                problem_table.stepping_stone()
+                problem_table.print_tab()
+        elif choice == 4:
+            # Marche pied with complexity calculation
+            optimise_test()
+        elif choice ==5 :
+            problem_table = load_problem_table()
+        elif choice == 6:
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()

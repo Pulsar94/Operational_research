@@ -377,17 +377,6 @@ class Tab:
         self.cout = cout_before
 
         self.end_fill()#remplissage des cases vides
-
-        #print("\n")
-        #print("cout", self.cout)
-        #print("content", self.content)
-        #print("command", self.command)
-        #print("provider", self.provider)
-        #print("balas done\n")
-
-    def is_acyclic(self): #quentin
-        #acyclique avec parcour en largeur
-        pass
     
     def is_connexe(self, virtual):
         node_count = len(self.provider) + len(self.command)
@@ -396,7 +385,7 @@ class Tab:
             for j in range(len(self.command)):
                 if self.content[i][j] > 0 or (i,j) in virtual:
                     edge_count += 1
-        return edge_count >= node_count - 1
+        return  node_count == edge_count -1
 
     def set_connexe(self):
         virtual = []
@@ -410,7 +399,8 @@ class Tab:
             return node
 
         while not self.is_connexe(virtual):
-            if add_fictif() in virtual:
+            fictif = add_fictif()
+            if fictif in virtual:
                 return False
             virtual.append(add_fictif())
 
@@ -469,7 +459,6 @@ class Tab:
         path.pop(-1)
         debt = self.content[path[-1][0]][path[-1][1]]
         negative = True
-
         if debt <= 0:
             return False
     
@@ -477,7 +466,7 @@ class Tab:
         for node in path:
             self.content[node[0]][node[1]] += -debt if negative else debt
             if self.content[node[0]][node[1]] < 0:
-                debt += self.content[node[0]][node[1]]
+                debt += self.content[node[0]][node[1]] 
                 self.content[node[0]][node[1]] = 0
             negative = not negative
 
@@ -529,7 +518,6 @@ class Tab:
         if virtual_links == False:
             return False
         while loop:
-
             value_command, value_provider = self.acquire_data_value(virtual_links)
             if value_command == False:
                 break

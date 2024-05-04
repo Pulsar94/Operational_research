@@ -46,6 +46,23 @@ class Tab:
         stepping_time = time.time() - starting_time - balas_time
         return balas_time, stepping_time, nord_time
 
+    def print_tab(self):
+        print("x", end="\t")
+        for i in range(len(self.provider)):
+            print("C" + str(i + 1), end="\t")
+        print("Prov.")
+
+        for i in range(len(self.provider)):
+            print("P" + str(i + 1), end="\t")
+            for j in range(len(self.command)):
+                print(str(self.content[i][j]) + "(" + str(self.cout[i][j]) + ")", end="\t")
+            print(self.provider[i])
+
+        print("Com.", end="\t")
+        for i in range(len(self.command)):
+            print(self.command[i], end="\t")
+        print(sum(self.command))
+
     def show_tab(self):
         print("\t\t\t", end = "")
         for i in range(len(self.command)):
@@ -264,8 +281,9 @@ class Tab:
 
 
     def nord_ouest(self):
-        command_temp = self.command
-        provider_temp = self.provider
+        command_temp = self.copie_tab(self.command)
+        provider_temp = self.copie_tab(self.provider)
+        self.content = [[-1] * len(self.cout[0]) for _ in range(len(self.cout))]
         if sum(command_temp) > sum(provider_temp) : 
             provider_temp.append(sum(command_temp)-sum(provider_temp))
 

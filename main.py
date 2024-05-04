@@ -1,7 +1,3 @@
-"""
-faire le pseudo code demandé par dans la consigne
-"""
-
 from Classtab import Tab
 from file import problem_initialization, input_file, traces_execution
 import os
@@ -9,47 +5,11 @@ import time
 
 # ------------------------- Reading file and start of the program -------------------------
 traces_execution()
-os.system('cls')
-num_file = input_file()
-problem_table = problem_initialization(num_file)
+def load_problem_table():
+    os.system('cls')
+    num_file = input_file()
+    return problem_initialization(num_file)
 
-
-"""
-tab.cout = [[6, 3, 8],
-            [5, 7, 4],
-            [8, 2, 3]]
-tab.command = [500, 240, 610, 350]#manque 350 par rapport au provider
-tab.provider = [450,
-                550,
-                700]#manque 700 par rapport au command
-"""
-"""
-tab.cout = [[15, 9, 8],
-            [2, 5, 2],
-            [3, 1, 6]]
-tab.command = [900, 140, 1000]
-tab.provider = [630,
-                650, 
-                660]
-"""
-"""
-tab.cout = [[15, 8, 3],
-            [14, 8, 3],
-            [13, 4, 3]]
-tab.command = [600, 700, 400]
-tab.provider = [400,
-                700,
-                600]
-"""
-"""
-tab.cout = [[15, 8, 3], 
-            [8, 6, 2], 
-            [3, 4, 1]]
-tab.command = [700, 600, 400]
-tab.provider = [800, 
-                700, 
-                300]
-"""
 
 
 def store_time(n, time1, time2, time3, t):
@@ -66,10 +26,10 @@ def optimise_test():
     t = 1
     while True:
         time1, time2, time3 = Tab().calculate_time(n)
-        print("Complexity: ", n)
-        print("Generating Nord_ouest:",round(time3,3), "seconds")
-        print("Generating Balas:",round(time1,3), "seconds")
-        print("Stepping Stone:",round(time2,3), "seconds")
+        print("Complexité: ", n)
+        print("Généré avec Nord ouest:",round(time3,3), "seconds")
+        print("Généré avec Balas-Hammer:",round(time1,3), "seconds")
+        print("Marche pied:",round(time2,3), "seconds")
         store_time(n, time1, time2, time3, t)
         n *= 2
         if n > 10000:
@@ -77,5 +37,43 @@ def optimise_test():
             n = 2
             t += 1
 
-#RIP IN PEPERONI
-optimise_test()
+def display_menu():
+    print("\n--- MENU ---")
+    print("1. Initialisation avec Nord-Ouest")
+    print("2. Initialisation avec Balas-Hammer")
+    print("3. Méthode du marche pied")
+    print("4. Marche pied avec calcul de la complexité")
+    print("5. Changer la table des contraintes")
+    print("6. Quitter")
+
+def main():
+    problem_table = load_problem_table()
+    while True:
+        display_menu()
+        choice = int(input("Saisissez votre choix : "))
+        if choice == 1:
+            problem_table.nord_ouest()
+            problem_table.print_tab()
+            print("Initialisation par la méthode Nord-Ouest.")
+        elif choice == 2:
+            problem_table.balas_hammer()
+            problem_table.print_tab()
+            print("Initialisation par la méthode Balas-Hammer.")
+        elif choice == 3:
+            if problem_table.content == []:
+                print("Veuillez d'abord initialiser le tableau!")
+            else:
+                problem_table.stepping_stone()
+                problem_table.print_tab()
+        elif choice == 4:
+            optimise_test()
+        elif choice ==5 :
+            problem_table = load_problem_table()
+        elif choice == 6:
+            print("Sortie...")
+            break
+        else:
+            print("Choix non valide. Veuillez réessayer.")
+
+if __name__ == "__main__":
+    main()

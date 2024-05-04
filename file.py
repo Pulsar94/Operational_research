@@ -10,10 +10,13 @@ def input_file():
     """
     num_file = 0
     while num_file < 1 or num_file > 12:
-        num_file = int(input("Veuillez choisir une table de contrainte de "
-                             "1 à 12 en inscrivant le numéro de la table : "))
-        if num_file < 1 or num_file > 12:
-            print("Veuillez entrer un numéro de table valide")
+        try:
+            num_file = int(input("Veuillez choisir une table de contrainte de "
+                                 "1 à 12 en inscrivant le numéro de la table : "))
+            if num_file < 1 or num_file > 12:
+                print("Veuillez entrer un numéro de table valide")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
 
     return num_file
 

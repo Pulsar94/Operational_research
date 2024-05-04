@@ -51,7 +51,11 @@ def main():
     problem_table = load_problem_table()
     while True:
         display_menu()
-        choice = int(input("Saisissez votre choix : "))
+        try:
+            choice = int(input("Saisissez votre choix : "))
+        except ValueError:
+            print("Choix non valide. Veuillez réessayer.")
+            continue
         if choice == 1:
             problem_table.nord_ouest()
             problem_table.print_tab()

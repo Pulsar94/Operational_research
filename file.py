@@ -120,7 +120,7 @@ def traces_execution():
     """
     # Check if the directory contain all the test files : to know if the file traces.txt already exists
     # path of the directory
-    path = "traces_execution"
+    path = "B2_traces_execution"
     # Check if the directory exists
     if not os.path.exists(path):
         os.makedirs(path)
@@ -132,7 +132,7 @@ def traces_execution():
         # Running the function for each file
         for num_file in range(1, 13):
             problem_table = problem_initialization(num_file)
-            with open("traces_execution/trace_table_" + str(num_file) + ".txt", "w", encoding="utf-8") as f:
+            with open(f"B2_traces_execution/B2_trace{num_file}.txt", "w", encoding="utf-8") as f:
                 f.write("----------- Etape 1 : Lecture & affichage de la table de contrainte -----------\n")
                 # Number of providers
                 f.write(f"Nombre de producteurs : {len(problem_table.provider)}\n")
@@ -140,22 +140,14 @@ def traces_execution():
                 # Number of commands
                 f.write(f"Nombre de commandes : {len(problem_table.command)}\n")
 
-                # # Write the cost table to the file
-                # # Redirect the std output to the file
-                # with contextlib.redirect_stdout(f):
-                #     problem_table.print_tab()
-                #     print("\n")
-
-                f.write("------------- Etape 2 : Nord-Ouest -------------\n")
+                f.write("\n-------------------- Etape 2 : Nord-Ouest --------------------\n")
                 # Redirect the std output to the file
                 with contextlib.redirect_stdout(f):
                     problem_table.nord_ouest()
-                    problem_table.print_tab()
-                    print("\n")
+                    problem_table.print_tab_traces()
 
-                f.write("\n----------- Etape 3 : Balas-Hammer -----------\n")
+                f.write("\n-------------------- Etape 3 : Balas-Hammer --------------------\n")
                 # Redirect the std output to the file
                 with contextlib.redirect_stdout(f):
                     problem_table.balas_hammer()
-                    problem_table.print_tab()
-                    print("\n")
+                    problem_table.print_tab_traces()

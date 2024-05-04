@@ -38,6 +38,8 @@ class Tab:
         temp_provider = self.provider.copy()
         self.nord_ouest()
         nord_time = time.time() - starting_time
+        self.stepping_stone()
+        stepping_time_nord = time.time() - starting_time - nord_time
 
         starting_time = time.time()
         self.command = temp_command
@@ -45,8 +47,9 @@ class Tab:
         self.balas_hammer()
         balas_time = time.time() - starting_time
         self.stepping_stone()
-        stepping_time = time.time() - starting_time - balas_time
-        return balas_time, stepping_time, nord_time
+        stepping_time_balas = time.time() - starting_time - balas_time
+
+        return balas_time, stepping_time_balas, nord_time, stepping_time_nord
 
     def print_tab(self):
         # Create a new PrettyTable object
@@ -58,6 +61,24 @@ class Tab:
         # Add rows to the table
         for i in range(len(self.cout)):
             row_data = [f"{c}({Fore.RED}{co}{Style.RESET_ALL})" for c, co in zip(self.content[i], self.cout[i])]
+            table.add_row(["P" + str(i + 1)] + row_data + [self.provider[i]])
+
+        # Add the last row
+        table.add_row(["Com."] + self.command + [sum(self.command)])
+
+        # Print the table
+        print(table)
+
+    def print_tab_traces(self):
+        # Create a new PrettyTable object
+        table = PrettyTable()
+
+        # Add the column names
+        table.field_names = ["x"] + ["C" + str(i + 1) for i in range(len(self.command))] + ["Prod."]
+
+        # Add rows to the table
+        for i in range(len(self.cout)):
+            row_data = [f"{c}({co})" for c, co in zip(self.content[i], self.cout[i])]
             table.add_row(["P" + str(i + 1)] + row_data + [self.provider[i]])
 
         # Add the last row

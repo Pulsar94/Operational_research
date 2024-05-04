@@ -140,14 +140,22 @@ def traces_execution():
                 # Number of commands
                 f.write(f"Nombre de commandes : {len(problem_table.command)}\n")
 
-                f.write("\n-------------------- Etape 2 : Nord-Ouest --------------------\n")
+                """f.write("\n-------------------- Etape 2 : Nord-Ouest --------------------\n")
                 # Redirect the std output to the file
                 with contextlib.redirect_stdout(f):
+                    print("Proposition initiale par la méthode du nord-ouest :\n")
                     problem_table.nord_ouest()
                     problem_table.print_tab_traces()
+                    print("\nMéthode du marche pied à partir de la proposition du nord-ouest :\n")
+                    problem_table.stepping_stone()
+                    problem_table.print_tab_traces()"""
 
                 f.write("\n-------------------- Etape 3 : Balas-Hammer --------------------\n")
                 # Redirect the std output to the file
                 with contextlib.redirect_stdout(f):
+                    print("Proposition initiale par la méthode de Balas-Hammer :\n")
                     problem_table.balas_hammer()
+                    problem_table.print_tab_traces()
+                    print("\nMéthode du marche pied à partir de la proposition de Balas-Hammer :\n")
+                    problem_table.stepping_stone()
                     problem_table.print_tab_traces()

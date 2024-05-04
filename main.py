@@ -2,6 +2,7 @@ from Classtab import Tab
 from file import problem_initialization, input_file, traces_execution
 import os
 import time
+from colorama import Fore, Style
 
 # ------------------------- Reading file and start of the program -------------------------
 traces_execution()
@@ -54,11 +55,11 @@ def main():
         if choice == 1:
             problem_table.nord_ouest()
             problem_table.print_tab()
-            print("Initialisation par la méthode Nord-Ouest.")
+            print(f"Initialisation par la méthode Nord-Ouest : Flot({Fore.RED}coût{Style.RESET_ALL})")
         elif choice == 2:
             problem_table.balas_hammer()
             problem_table.print_tab()
-            print("Initialisation par la méthode Balas-Hammer.")
+            print(f"Initialisation par la méthode Balas-Hammer : Flot({Fore.RED}coût{Style.RESET_ALL})")
         elif choice == 3:
             if problem_table.content == []:
                 print("Veuillez d'abord initialiser le tableau!")

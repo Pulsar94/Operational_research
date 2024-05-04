@@ -1,5 +1,7 @@
 import random
 import time
+from prettytable import PrettyTable
+from colorama import Fore, Style
 
 class Tab:
     def __init__(self):
@@ -47,21 +49,22 @@ class Tab:
         return balas_time, stepping_time, nord_time
 
     def print_tab(self):
-        print("x", end="\t")
-        for i in range(len(self.provider)):
-            print("C" + str(i + 1), end="\t")
-        print("Prov.")
+        # Create a new PrettyTable object
+        table = PrettyTable()
 
-        for i in range(len(self.provider)):
-            print("P" + str(i + 1), end="\t")
-            for j in range(len(self.command)):
-                print(str(self.content[i][j]) + "(" + str(self.cout[i][j]) + ")", end="\t")
-            print(self.provider[i])
+        # Add the column names
+        table.field_names = ["x"] + ["C" + str(i + 1) for i in range(len(self.command))] + ["Prod."]
 
-        print("Com.", end="\t")
-        for i in range(len(self.command)):
-            print(self.command[i], end="\t")
-        print(sum(self.command))
+        # Add rows to the table
+        for i in range(len(self.cout)):
+            row_data = [f"{c}({Fore.RED}{co}{Style.RESET_ALL})" for c, co in zip(self.content[i], self.cout[i])]
+            table.add_row(["P" + str(i + 1)] + row_data + [self.provider[i]])
+
+        # Add the last row
+        table.add_row(["Com."] + self.command + [sum(self.command)])
+
+        # Print the table
+        print(table)
 
     def show_tab(self):
         print("\t\t\t", end = "")
@@ -73,11 +76,6 @@ class Tab:
             print("\nS"+str(i), end="\t\t\t")
             for j in range(len(self.command)):
                 print(str(self.content[i][j])+ " (" + str(self.cout[i][j])+")", end="\t\t\t")
-
-    #faire les fonctions affiches --> tibitou
-    def display_tab(self): #tibitou
-        # TODO: afficher tableau cout et tableau content
-        pass
 
     def is_command_equal_provider(self):#marc
         if sum(self.command) == sum(self.provider):
@@ -378,15 +376,16 @@ class Tab:
                 if self.content[i][j] > 0 or (i,j) in virtual:
                     edge_count += 1
         return edge_count >= node_count - 1
-    
+
     def set_connexe(self):
         virtual = []
+
         def add_fictif():
-            node, cost = (0,0), self.cout[0][0]
+            node, cost = (0, 0), 9999
             for i in range(len(self.provider)):
                 for j in range(len(self.command)):
                     if self.content[i][j] == 0 and self.cout[i][j] < cost:
-                        node, cost = (i,j), 9999
+                        node, cost = (i, j), self.cout[i][j]
             return node
 
         while not self.is_connexe(virtual):
@@ -395,35 +394,37 @@ class Tab:
             virtual.append(add_fictif())
 
         return virtual
-    
-    def acquire_data_value(self, virtual):
-        value_provider = {0:0}
-        value_provider_copy = {0:0}
-        value_command = {}
 
-        def set_value(i,j):
+    def acquire_data_value(self, virtual):
+        value_provider = {0: 0}
+        value_provider_copy = {0: 0}
+        value_command = {}
+        value_command_copy = {}
+
+        def set_value(i, j):
 
             if i in value_provider:
                 value_command[j] = value_provider[i] - self.cout[i][j]
                 return False
-            
+
             if j in value_command:
                 value_provider[i] = self.cout[i][j] + value_command[j]
                 return False
 
             return True
-        
+
         loop = True
-        while loop: # Lazy failsafe
+        while loop:
             loop = False
             for i in range(len(self.provider)):
                 for j in range(len(self.command)):
-                    if ((i,j) in virtual or self.content[i][j] > 0) and set_value(i,j):
+                    if ((i, j) in virtual or self.content[i][j] > 0) and set_value(i, j):
                         loop = True
-            if value_provider_copy == value_provider:
+            if value_provider_copy == value_provider and value_command_copy == value_command:
                 return False, False
             value_provider_copy = value_provider.copy()
-        
+            value_command_copy = value_command.copy()
+
         return value_command, value_provider
                     
     def cout_potentiel(self, value_command, value_provider):
@@ -503,15 +504,16 @@ class Tab:
 
     def stepping_stone(self):
         loop = True
+        virtual_links = self.set_connexe()
+        if virtual_links == False:
+            return False
         while loop:
-            virtual_links = self.set_connexe()
-            if virtual_links == False:
-                break
+
             value_command, value_provider = self.acquire_data_value(virtual_links)
             if value_command == False:
                 break
             potential_cost = self.cout_potentiel(value_command, value_provider)
             marginal_cost = self.cout_marginaux(potential_cost)
             loop = self.update_content(marginal_cost, virtual_links)
-        
+
         return True

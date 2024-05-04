@@ -137,13 +137,22 @@ def traces_execution():
                 # Number of commands
                 f.write(f"Nombre de commandes : {len(problem_table.command)}\n")
 
-                # Write the cost table to the file
-                # Redirect the std output to the file
-                with contextlib.redirect_stdout(f):
-                    problem_table.display_tab()
-                    print("\n")
+                # # Write the cost table to the file
+                # # Redirect the std output to the file
+                # with contextlib.redirect_stdout(f):
+                #     problem_table.print_tab()
+                #     print("\n")
 
                 f.write("------------- Etape 2 : Nord-Ouest -------------\n")
-                # TODO : Implement the North-West algorithm
+                # Redirect the std output to the file
+                with contextlib.redirect_stdout(f):
+                    problem_table.nord_ouest()
+                    problem_table.print_tab()
+                    print("\n")
+
                 f.write("\n----------- Etape 3 : Balas-Hammer -----------\n")
-                # TODO : Implement the Balas-Hammer algorithm
+                # Redirect the std output to the file
+                with contextlib.redirect_stdout(f):
+                    problem_table.balas_hammer()
+                    problem_table.print_tab()
+                    print("\n")

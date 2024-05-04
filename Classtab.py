@@ -386,7 +386,7 @@ class Tab:
             for i in range(len(self.provider)):
                 for j in range(len(self.command)):
                     if self.content[i][j] == 0 and self.cout[i][j] < cost:
-                        node, cost = (i,j), self.cout[i][j]
+                        node, cost = (i,j), 9999
             return node
 
         while not self.is_connexe(virtual):

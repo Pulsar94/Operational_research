@@ -573,6 +573,6 @@ class Tab:
     def total_cost(self):
         total = 0
         for i in range(len(self.cout)):
-            for j in range(len(self.cout)):
+            for j in range(len(self.cout[0])):
                 total += self.content[i][j] * self.cout[i][j]
         return total

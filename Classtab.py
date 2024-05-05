@@ -38,7 +38,7 @@ class Tab:
         temp_provider = self.provider.copy()
         self.nord_ouest()
         nord_time = time.time() - starting_time
-        self.stepping_stone()
+        potential_cost, marginal_cost = self.stepping_stone()
         stepping_time_nord = time.time() - starting_time - nord_time
 
         starting_time = time.time()
@@ -46,7 +46,7 @@ class Tab:
         self.provider = temp_provider
         self.balas_hammer()
         balas_time = time.time() - starting_time
-        self.stepping_stone()
+        potential_cost, marginal_cost = self.stepping_stone()
         stepping_time_balas = time.time() - starting_time - balas_time
 
         return balas_time, stepping_time_balas, nord_time, stepping_time_nord
@@ -86,6 +86,26 @@ class Tab:
 
         # Print the table
         print(table)
+
+    def print_tab_cout(self, potential_cost, marginal_cost):
+        # Create a new PrettyTable object
+        table_marge = PrettyTable()
+        table_marge.header = False
+        table_pot = PrettyTable()
+        table_pot.header = False
+
+        # Add a title
+        table_marge.title = "Tableau des coûts marginaux"
+        for i in range(len(marginal_cost)):
+            table_marge.add_row(marginal_cost[i])
+
+        table_pot.title = "Tableau des coûts potentiels"
+        for i in range(len(potential_cost)):
+            table_pot.add_row(marginal_cost[i])
+
+        # Print tables
+        print(table_marge)
+        print(table_pot)
 
     def show_tab(self):
         print("\t\t\t", end = "")
@@ -535,6 +555,7 @@ class Tab:
         return False
 
     def stepping_stone(self):
+        global marginal_cost, potential_cost
         loop = True
         virtual_links = self.set_connexe()
         if virtual_links == False:
@@ -547,4 +568,11 @@ class Tab:
             marginal_cost = self.cout_marginaux(potential_cost)
             loop = self.update_content(marginal_cost, virtual_links)
 
-        return True
+        return potential_cost, marginal_cost
+
+    def total_cost(self):
+        total = 0
+        for i in range(len(self.cout)):
+            for j in range(len(self.cout)):
+                total += self.content[i][j] * self.cout[i][j]
+        return total

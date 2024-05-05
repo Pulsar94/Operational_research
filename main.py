@@ -85,18 +85,23 @@ def main():
 
         if choice == 1:
             problem_table.nord_ouest()
-            problem_table.print_tab()
             print(f"Initialisation par la méthode Nord-Ouest : Flot({Fore.RED}coût{Style.RESET_ALL})")
+            problem_table.print_tab()
         elif choice == 2:
             problem_table.balas_hammer()
-            problem_table.print_tab()
             print(f"Initialisation par la méthode Balas-Hammer : Flot({Fore.RED}coût{Style.RESET_ALL})")
+            problem_table.print_tab()
         elif choice == 3:
             if problem_table.content == []:
                 print("Veuillez d'abord initialiser le tableau!")
             else:
-                problem_table.stepping_stone()
+                print(f"Marche pied : Flot({Fore.RED}coût{Style.RESET_ALL})")
+                potential_cost, marginal_cost = problem_table.stepping_stone()
                 problem_table.print_tab()
+                total_cost = problem_table.total_cost()
+                print(f"Coût total : {Fore.BLUE}{total_cost}{Style.RESET_ALL}")
+                print("\nCoûts potentiels et marginaux :\n")
+                problem_table.print_tab_cout(potential_cost, marginal_cost)
         elif choice == 4:
             optimise_test()
         elif choice == 5:

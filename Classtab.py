@@ -385,7 +385,30 @@ class Tab:
             for j in range(len(self.command)):
                 if self.content[i][j] > 0 or (i,j) in virtual:
                     edge_count += 1
-        return  node_count == edge_count -1
+        return node_count -1 == edge_count 
+    
+    def is_linked_to_zero(self, x, y):
+        visited = set()
+        
+        def dfs(i, j):
+            if i == 0:
+                return True
+            
+            visited.add((i, j))
+            
+            for ni in range(len(self.content)):
+                if (ni, j) not in visited and self.content[ni][j] > 0:
+                    if dfs(ni, j):
+                        return True
+            
+            for nj in range(len(self.content[0])):
+                if (i, nj) not in visited and self.content[i][nj] > 0:
+                    if dfs(i, nj):
+                        return True
+
+            return False
+        
+        return dfs(x, y)
 
     def set_connexe(self):
         virtual = []
@@ -394,7 +417,7 @@ class Tab:
             node, cost = (0, 0), 9999
             for i in range(len(self.provider)):
                 for j in range(len(self.command)):
-                    if self.content[i][j] == 0 and self.cout[i][j] < cost:
+                    if self.content[i][j] == 0 and self.cout[i][j] < cost and self.is_linked_to_zero(i, j) and (i, j) not in virtual:
                         node, cost = (i, j), self.cout[i][j]
             return node
 
@@ -402,7 +425,7 @@ class Tab:
             fictif = add_fictif()
             if fictif in virtual:
                 return False
-            virtual.append(add_fictif())
+            virtual.append(fictif)
 
         return virtual
 
@@ -499,12 +522,11 @@ class Tab:
         return n_node([new_node], False, True)
 
     def update_content(self, marginal_cost, virtual_links):
-        node, cost = (0,0), marginal_cost[0][0]
+        node, cost = (0,0), 9999
         for i in range(len(self.provider)):
             for j in range(len(self.command)):
-                if marginal_cost[i][j] < cost:
+                if marginal_cost[i][j] < cost and (i,j) not in virtual_links:
                     node, cost = (i,j), marginal_cost[i][j]
-        
         if cost < 0:
             path = self.get_cyclic_path(node, virtual_links)
             self.update_from_path(path)

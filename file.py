@@ -127,12 +127,12 @@ def traces_execution():
     # Getting the list of directories
     dir_traces = os.listdir(path)
     # Checking if the list of directories contains all the test files
-    if len(dir_traces) < 12:
+    if len(dir_traces) < 24:
 
         # Running the function for each file
         for num_file in range(1, 13):
             problem_table = problem_initialization(num_file)
-            with open(f"B2_traces_execution/B2_trace{num_file}.txt", "w", encoding="utf-8") as f:
+            with open(f"B2_traces_execution/B2_trace{num_file}_no.txt", "w", encoding="utf-8") as f:
                 f.write("----------- Etape 1 : Lecture & affichage de la table de contrainte -----------\n")
                 # Number of providers
                 f.write(f"Nombre de producteurs : {len(problem_table.provider)}\n")
@@ -140,7 +140,7 @@ def traces_execution():
                 # Number of commands
                 f.write(f"Nombre de commandes : {len(problem_table.command)}\n")
 
-                """f.write("\n-------------------- Etape 2 : Nord-Ouest --------------------\n")
+                f.write("\n-------------------- Etape 2 : Nord-Ouest --------------------\n")
                 # Redirect the std output to the file
                 with contextlib.redirect_stdout(f):
                     print("Proposition initiale par la méthode du nord-ouest :\n")
@@ -148,9 +148,17 @@ def traces_execution():
                     problem_table.print_tab_traces()
                     print("\nMéthode du marche pied à partir de la proposition du nord-ouest :\n")
                     problem_table.stepping_stone()
-                    problem_table.print_tab_traces()"""
+                    problem_table.print_tab_traces()
 
-                f.write("\n-------------------- Etape 3 : Balas-Hammer --------------------\n")
+            with open(f"B2_traces_execution/B2_trace{num_file}_bh.txt", "w", encoding="utf-8") as f:
+                f.write("----------- Etape 1 : Lecture & affichage de la table de contrainte -----------\n")
+                # Number of providers
+                f.write(f"Nombre de producteurs : {len(problem_table.provider)}\n")
+
+                # Number of commands
+                f.write(f"Nombre de commandes : {len(problem_table.command)}\n")
+
+                f.write("\n-------------------- Etape 2 : Balas-Hammer --------------------\n")
                 # Redirect the std output to the file
                 with contextlib.redirect_stdout(f):
                     print("Proposition initiale par la méthode de Balas-Hammer :\n")

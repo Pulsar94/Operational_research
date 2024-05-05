@@ -385,7 +385,6 @@ class Tab:
             for j in range(len(self.command)):
                 if self.content[i][j] > 0 or (i,j) in virtual:
                     edge_count += 1
-        print(node_count, edge_count)
         return node_count -1 == edge_count 
     
     def is_linked_to_zero(self, x, y):
@@ -528,7 +527,6 @@ class Tab:
             for j in range(len(self.command)):
                 if marginal_cost[i][j] < cost and (i,j) not in virtual_links:
                     node, cost = (i,j), marginal_cost[i][j]
-        print(node, cost)
         if cost < 0:
             path = self.get_cyclic_path(node, virtual_links)
             self.update_from_path(path)
@@ -542,7 +540,6 @@ class Tab:
         if virtual_links == False:
             return False
         while loop:
-            print("loop")
             value_command, value_provider = self.acquire_data_value(virtual_links)
             if value_command == False:
                 break

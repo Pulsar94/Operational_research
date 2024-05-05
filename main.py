@@ -100,7 +100,7 @@ def main():
                 problem_table.print_tab()
                 total_cost = problem_table.total_cost()
                 print(f"Coût total : {Fore.BLUE}{total_cost}{Style.RESET_ALL}")
-                print("\nCoûts potentiels et marginaux :\n")
+                print("\nCoûts potentiels et marginaux (avant étape finale) :\n")
                 problem_table.print_tab_cout(potential_cost, marginal_cost)
         elif choice == 4:
             optimise_test()

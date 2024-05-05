@@ -101,7 +101,7 @@ class Tab:
 
         table_pot.title = "Tableau des coûts potentiels"
         for i in range(len(potential_cost)):
-            table_pot.add_row(marginal_cost[i])
+            table_pot.add_row(potential_cost[i])
 
         # Print tables
         print(table_marge)

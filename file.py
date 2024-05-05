@@ -152,7 +152,7 @@ def traces_execution():
                     problem_table.print_tab_traces()
                     total_cost = problem_table.total_cost()
                     print(f"Coût total : {total_cost}")
-                    print("\nCoûts potentiels et marginaux :\n")
+                    print("\nCoûts potentiels et marginaux (avant étape finale) :\n")
                     problem_table.print_tab_cout(potential_cost, marginal_cost)
 
             with open(f"B2_traces_execution/B2_trace{num_file}_bh.txt", "w", encoding="utf-8") as f:
@@ -175,5 +175,5 @@ def traces_execution():
                     problem_table.print_tab_traces()
                     total_cost = problem_table.total_cost()
                     print(f"Coût total : {total_cost}")
-                    print("\nCoûts potentiels et marginaux :\n")
+                    print("\nCoûts potentiels et marginaux (avant étape finale) :\n")
                     problem_table.print_tab_cout(potential_cost, marginal_cost)

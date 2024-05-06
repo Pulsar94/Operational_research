@@ -358,6 +358,7 @@ class Tab:
         return
 
     def balas_hammer(self): #marc
+        self.add_fictif()
         cout_before = []
         cou_sous_before = []
         for i in self.cout:

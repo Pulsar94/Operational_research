@@ -320,19 +320,12 @@ class Tab:
 
 
     def nord_ouest(self):
+        self.add_fictif()
         command_temp = self.copie_tab(self.command)
         provider_temp = self.copie_tab(self.provider)
         self.content = [[-1] * len(self.cout[0]) for _ in range(len(self.cout))]
-        if sum(command_temp) > sum(provider_temp) : 
-            provider_temp.append(sum(command_temp)-sum(provider_temp))
-
-        if sum(command_temp) < sum(provider_temp) : 
-            command_temp.append(sum(provider_temp)-sum(command_temp))
-
         providersize = len(provider_temp)
         commandsize = len(command_temp)
-        for i in range(providersize):
-            self.content.append([0] * commandsize)
         
         cpt_provider = 0
         cpt_command = 0
@@ -349,8 +342,8 @@ class Tab:
             else:  
                 self.content[cpt_provider][cpt_command] = command_temp[cpt_command]
                 cpt_provider += 1
-                cpt_command += 1
-        
+
+                cpt_command += 1          
         for i in range(len(self.content)):
             for j in range(len(self.content[0])):
                 if self.content[i][j] == -1:
